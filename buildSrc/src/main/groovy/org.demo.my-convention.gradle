@@ -10,12 +10,17 @@ tasks.withType(Test).configureEach {
     useJUnitPlatform()
 }
 
-def hello = tasks.register("hello", org.demo.GreetingTask) {
+def codeGen = tasks.register("generateCode", org.demo.CodeGeneratorTask) {
     group = BasePlugin.BUILD_GROUP
-    description = "Prints a greeting to the console"
+    description = "Generates Java sources"
+    outputDirectory.convention(layout.buildDirectory.dir("codegen"))
     message.convention(providers.systemProperty("message").orElse("Hello, Gradle!"))
 }
 
-tasks.named("check") {
-    dependsOn(hello)
+sourceSets {
+    main {
+        java {
+            srcDir(codeGen)
+        }
+    }
 }

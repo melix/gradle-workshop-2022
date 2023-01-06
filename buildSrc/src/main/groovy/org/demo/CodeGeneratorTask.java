@@ -16,16 +16,35 @@
 package org.demo;
 
 import org.gradle.api.DefaultTask;
+import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
 
-public abstract class GreetingTask extends DefaultTask {
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+
+public abstract class CodeGeneratorTask extends DefaultTask {
     @Input
     abstract Property<String> getMessage();
 
+    @OutputDirectory
+    abstract DirectoryProperty getOutputDirectory();
+
     @TaskAction
-    void greet() {
-        getLogger().lifecycle(getMessage().get());
+    void generateCode() throws IOException {
+        File outputDir = getOutputDirectory().getAsFile().get();
+        Path javaFile = outputDir.toPath().resolve("org/demo/Constants.java");
+        Files.createDirectories(javaFile.getParent());
+        Files.write(javaFile, List.of(
+                "package org.demo;",
+                "public class Constants {",
+                "    public static final String MESSAGE = \"" + getMessage().get() + "\";",
+                "}"
+        ));
     }
 }
