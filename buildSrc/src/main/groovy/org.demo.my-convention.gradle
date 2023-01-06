@@ -1,0 +1,11 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+}
