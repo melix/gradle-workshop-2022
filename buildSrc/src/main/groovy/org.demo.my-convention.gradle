@@ -9,3 +9,13 @@ repositories {
 tasks.withType(Test).configureEach {
     useJUnitPlatform()
 }
+
+def hello = tasks.register("hello", org.demo.GreetingTask) {
+    group = BasePlugin.BUILD_GROUP
+    description = "Prints a greeting to the console"
+    message.convention(providers.systemProperty("message").orElse("Hello, Gradle!"))
+}
+
+tasks.named("check") {
+    dependsOn(hello)
+}
