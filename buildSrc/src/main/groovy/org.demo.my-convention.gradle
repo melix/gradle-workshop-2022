@@ -17,3 +17,9 @@ def sourceGen = tasks.register("generateSources", org.demo.HelloWorldGenerator) 
     message.convention(providers.systemProperty("message").orElse("Hello, Gradle!"))
     outputDirectory.convention(layout.buildDirectory.dir("generated/sources/my-generator"))
 }
+
+sourceSets {
+    main {
+        java.srcDir(sourceGen)
+    }
+}
