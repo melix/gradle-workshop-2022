@@ -17,6 +17,14 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
+
+    implementation(project(":my-lib"))
+
+    constraints {
+        implementation(libs.errorprone) {
+            because "Includes a bugfix for xxx"
+        }
+    }
 }
 
 application {
